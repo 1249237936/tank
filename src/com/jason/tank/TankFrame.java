@@ -56,11 +56,7 @@ public class TankFrame extends Frame {
         g.drawString("敌人的数量：" + tanks.size(), 10, 80);
         g.setColor(c);
 
-        if (myTank.isLiving()) {
-            myTank.setSpeed(5);
-            myTank.paint(g);
-        }
-
+        myTank.paint(g);
 
         for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).paint(g);

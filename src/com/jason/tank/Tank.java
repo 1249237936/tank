@@ -26,6 +26,7 @@ public class Tank {
         this.y = y;
         this.dir = dir;
         this.group = group;
+        if (group.equals(Group.GOOD)) speed = 10;
         this.tf = tf;
     }
 
@@ -138,13 +139,6 @@ public class Tank {
         this.living = living;
     }
 
-    public int getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
 //getter setter
 
 }
