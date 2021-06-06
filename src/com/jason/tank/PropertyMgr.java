@@ -8,15 +8,17 @@ public class PropertyMgr {
 
     static {
         try {
-            pros.load(PropertyMgr.class.getClassLoader().getResourceAsStream("config"));
+            pros.load(PropertyMgr.class.getClassLoader().getResourceAsStream("config.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static String get(String key) {
-        if (pros == null) return null;
+    public static String getString(String key) {
         return pros.getProperty(key);
     }
 
+    public static Integer getInt(String key) {
+        return Integer.parseInt(pros.getProperty(key));
+    }
 }
