@@ -4,14 +4,10 @@ package com.jason.tank;
 import javax.sound.sampled.*;
 import java.io.IOException;
 
-public class Audio implements Runnable {
+public class Audio {
 
 	byte[] b = new byte[1024 * 1024 * 15];
 
-	@Override
-	public void run() {
-		play();
-	}
 
 	public void loop() {
 		try {
