@@ -11,6 +11,8 @@ public class Tank {
     public static final int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static final int HEIGHT = ResourceMgr.goodTankU.getHeight();
 
+    Rectangle rect = new Rectangle();
+
     private boolean moving = true;
 
     private boolean living = true;
@@ -28,6 +30,11 @@ public class Tank {
         this.group = group;
         if (group.equals(Group.GOOD)) speed = 10;
         this.tf = tf;
+
+        rect.x = this.x;
+        rect.y = this.y;
+        rect.width = WIDTH;
+        rect.height = HEIGHT;
     }
 
     public void paint(Graphics g) {
@@ -81,6 +88,10 @@ public class Tank {
             randomDir();
 
         boundCheck();
+
+        //update rect
+        rect.x = this.x;
+        rect.y = this.y;
     }
 
     private void boundCheck() {
