@@ -8,7 +8,7 @@ import java.io.IOException;
 public class ResourceMgr {
     public static BufferedImage goodTankL, goodTankU, goodTankR, goodTankD;
     public static BufferedImage badTankL, badTankU, badTankR, badTankD;
-    public static BufferedImage bulletL, bulletU, bulletR, bulletD;
+    public static BufferedImage bulletL, bulletU, bulletR, bulletD, bulletLU, bulletRU, bulletRD, bulletLD;
     public static BufferedImage[] explodes = new BufferedImage[16];
 
 
@@ -29,6 +29,10 @@ public class ResourceMgr {
             bulletL = ImageUtil.rotateImage(bulletU, -90);
             bulletR = ImageUtil.rotateImage(bulletU, 90);
             bulletD = ImageUtil.rotateImage(bulletU, 180);
+            bulletLU = ImageUtil.rotateImage(bulletU, -45);
+            bulletRU = ImageUtil.rotateImage(bulletU, 45);
+            bulletLD = ImageUtil.rotateImage(bulletU, -135);
+            bulletRD = ImageUtil.rotateImage(bulletU, 135);
             for (int i = 0; i < 16; i++) {
                 explodes[i] = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/e" + (i + 1) + ".gif"));
             }

@@ -56,6 +56,20 @@ public class Bullet {
             case DOWN:
                 g.drawImage(ResourceMgr.bulletD, x, y, null);
                 break;
+
+            case LEFT_UP:
+                g.drawImage(ResourceMgr.bulletLU, x, y, null);
+                break;
+            case RIGHT_UP:
+                g.drawImage(ResourceMgr.bulletRU, x, y, null);
+                break;
+            case LEFT_DOWN:
+                g.drawImage(ResourceMgr.bulletLD, x, y, null);
+                break;
+            case DOWN_RIGHT:
+                g.drawImage(ResourceMgr.bulletRD, x, y, null);
+                break;
+
             default:
                 break;
         }
@@ -77,6 +91,24 @@ public class Bullet {
             case DOWN:
                 y += SPEED;
                 break;
+
+            case LEFT_UP:
+                x -= SPEED;
+                y -= SPEED;
+                break;
+            case RIGHT_UP:
+                y -= SPEED;
+                x += SPEED;
+                break;
+            case LEFT_DOWN:
+                x -= SPEED;
+                y += SPEED;
+                break;
+            case DOWN_RIGHT:
+                y += SPEED;
+                x += SPEED;
+                break;
+
             default:
                 break;
         }

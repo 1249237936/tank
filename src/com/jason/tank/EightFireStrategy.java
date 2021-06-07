@@ -1,14 +1,14 @@
 package com.jason.tank;
 
-public class FourFireStrategy implements FireStrategy {
-    private FourFireStrategy() {}
-    private static volatile FourFireStrategy INSTANCE = null;
+public class EightFireStrategy implements FireStrategy {
+    private EightFireStrategy() {}
+    private static volatile EightFireStrategy INSTANCE = null;
 
-    public static FourFireStrategy getInstance() {
+    public static EightFireStrategy getInstance() {
         if (INSTANCE == null) {
-            synchronized (FourFireStrategy.class) {
+            synchronized (EightFireStrategy.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new FourFireStrategy();
+                    INSTANCE = new EightFireStrategy();
                 }
             }
         }
@@ -20,7 +20,7 @@ public class FourFireStrategy implements FireStrategy {
         int bX = t.getX() + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
         int bY = t.getY() + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
 
-        Dir[] dirs = Dir.getFourDir();
+        Dir[] dirs = Dir.values();
         for (Dir dir : dirs) {
             new Bullet(bX, bY, dir, t.getGroup(), t.getTf());
         }
