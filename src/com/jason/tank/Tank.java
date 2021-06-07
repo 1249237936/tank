@@ -1,6 +1,7 @@
 package com.jason.tank;
 
 import java.awt.*;
+import java.lang.reflect.Method;
 import java.util.Random;
 
 public class Tank {
@@ -10,6 +11,10 @@ public class Tank {
 
     public static final int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static final int HEIGHT = ResourceMgr.goodTankU.getHeight();
+
+    private static final String GOOD_FS= "goodFS";
+    private static final String BAD_FS= "badFS";
+    private static final String GET_INSTANCE = "getInstance";
 
     Rectangle rect = new Rectangle();
 
@@ -23,7 +28,9 @@ public class Tank {
 
     private Group group = Group.BAD;
 
-    public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
+    private FireStrategy fs;
+
+    public Tank(int x, int y, Dir dir, Group group, TankFrame tf)  {
         this.x = x;
         this.y = y;
         this.dir = dir;
@@ -35,6 +42,20 @@ public class Tank {
         rect.y = this.y;
         rect.width = WIDTH;
         rect.height = HEIGHT;
+
+        if (this.group == Group.GOOD) fs = getFireStrategyByName(GOOD_FS);
+        else fs = getFireStrategyByName(BAD_FS);
+    }
+
+    private FireStrategy getFireStrategyByName(String name) {
+        try {
+            Class fsClazz = Class.forName(PropertyMgr.getString(name));
+            Method method = fsClazz.getDeclaredMethod(GET_INSTANCE);
+            return (FireStrategy) method.invoke(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return DefaultFireStrategy.getInstance();
     }
 
     public void paint(Graphics g) {
@@ -106,9 +127,7 @@ public class Tank {
     }
 
     public void fire() {
-        int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
-        int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
-        this.tf.bullets.add(new Bullet(bX, bY, dir, this.group, tf));
+        fs.fire(this);
     }
 
     public void die() {
@@ -164,6 +183,13 @@ public class Tank {
         this.living = living;
     }
 
+    public TankFrame getTf() {
+        return tf;
+    }
+
+    public void setTf(TankFrame tf) {
+        this.tf = tf;
+    }
 //getter setter
 
 }
