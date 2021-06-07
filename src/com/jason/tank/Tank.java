@@ -5,16 +5,19 @@ import java.lang.reflect.Method;
 import java.util.Random;
 
 public class Tank {
-    private int x, y;
-    private Dir dir = Dir.DOWN;
-    private int speed = PropertyMgr.getInt("tankSpeed");
+    private static final String GOOD_FS= "goodFS";
+    private static final String BAD_FS= "badFS";
+    private static final String GET_INSTANCE = "getInstance";
+    private static final String TANK_SPEED = "tankSpeed";
+    private static final String HIGH_SPEED = "HighSpeed";
+
 
     public static final int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static final int HEIGHT = ResourceMgr.goodTankU.getHeight();
 
-    private static final String GOOD_FS= "goodFS";
-    private static final String BAD_FS= "badFS";
-    private static final String GET_INSTANCE = "getInstance";
+    private int x, y;
+    private Dir dir = Dir.DOWN;
+    private int speed = PropertyMgr.getInt(TANK_SPEED);
 
     Rectangle rect = new Rectangle();
 
@@ -35,7 +38,7 @@ public class Tank {
         this.y = y;
         this.dir = dir;
         this.group = group;
-        if (group.equals(Group.GOOD)) speed = 10;
+        if (group.equals(Group.GOOD)) speed = PropertyMgr.getInt(HIGH_SPEED);
         this.tf = tf;
 
         rect.x = this.x;
