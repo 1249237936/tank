@@ -1,6 +1,8 @@
 package com.jason.tank;
 
+import com.jason.tank.abstractfactory.BaseTank;
+
 public interface FireStrategy {
-    void fire(Tank t);
+    void fire(BaseTank t);
 
 }

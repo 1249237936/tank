@@ -1,19 +1,17 @@
-package com.jason.tank;
+package com.jason.tank.abstractfactory;
 
-import com.jason.tank.abstractfactory.BaseTank;
+import com.jason.tank.*;
 
 import java.awt.*;
 import java.util.Random;
 
 import static com.jason.tank.ReflectUtil.getSingleInstance;
 
-public class Tank extends BaseTank {
+public class RectTank extends BaseTank {
     private static final String GOOD_FS= "goodFS";
     private static final String BAD_FS= "badFS";
     private static final String TANK_SPEED = "tankSpeed";
     private static final String HIGH_SPEED = "HighSpeed";
-
-
 
     private int speed = PropertyMgr.getInt(TANK_SPEED);
 
@@ -25,7 +23,7 @@ public class Tank extends BaseTank {
 
     private final FireStrategy fs;
 
-    public Tank(int x, int y, Dir dir, Group group, TankFrame tf)  {
+    public RectTank(int x, int y, Dir dir, Group group, TankFrame tf)  {
         this.x = x;
         this.y = y;
         this.dir = dir;
@@ -47,25 +45,12 @@ public class Tank extends BaseTank {
 
         if (!living) tf.tanks.remove(this);
 
-        switch (dir) {
-            case LEFT:
-                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankL : ResourceMgr.badTankL, x, y, null);
-                break;
-            case UP:
-                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankU : ResourceMgr.badTankU, x, y, null);
-                break;
-            case RIGHT:
-                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankR : ResourceMgr.badTankR, x, y, null);
-                break;
-            case DOWN:
-                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankD : ResourceMgr.badTankD, x, y, null);
-                break;
-            default:
-                break;
-        }
+        Color c = g.getColor();
+        g.setColor(group == Group.GOOD ? Color.WHITE : Color.BLUE);
+        g.fillRect(x, y, 40, 40);
+        g.setColor(c);
 
         move();
-
     }
 
     private void move() {
@@ -101,10 +86,10 @@ public class Tank extends BaseTank {
     }
 
     private void boundCheck() {
-        if (this.x < 0) x = TankFrame.GAME_WIDTH - Tank.WIDTH;
-        if (this.y < 28) x = TankFrame.GAME_HEIGHT - Tank.HEIGHT;
-        if (this.x > TankFrame.GAME_WIDTH - Tank.WIDTH) x = 2;
-        if (this.y > TankFrame.GAME_HEIGHT - Tank.HEIGHT) y = 28;
+        if (this.x < 0) x = TankFrame.GAME_WIDTH - RectTank.WIDTH;
+        if (this.y < 28) x = TankFrame.GAME_HEIGHT - RectTank.HEIGHT;
+        if (this.x > TankFrame.GAME_WIDTH - RectTank.WIDTH) x = 2;
+        if (this.y > TankFrame.GAME_HEIGHT - RectTank.HEIGHT) y = 28;
     }
 
     private void randomDir() {

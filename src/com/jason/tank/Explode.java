@@ -1,13 +1,12 @@
 package com.jason.tank;
 
+import com.jason.tank.abstractfactory.BaseExplode;
+
 import java.awt.*;
 
-public class Explode {
-    public static final int WIDTH = ResourceMgr.explodes[0].getWidth();
-    public static final int HEIGHT = ResourceMgr.explodes[0].getHeight();
+public class Explode extends BaseExplode {
+
     private int x, y;
-
-
     private TankFrame tf;
 
     private int step = 0;
@@ -19,7 +18,7 @@ public class Explode {
 
         new Thread(() -> new Audio("audio/explode.wav").play()).start();
     }
-
+    @Override
     public void paint(Graphics g) {
         g.drawImage(ResourceMgr.explodes[step++], x, y, null);
 

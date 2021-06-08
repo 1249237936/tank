@@ -1,5 +1,10 @@
 package com.jason.tank;
 
+import com.jason.tank.abstractfactory.BaseBullet;
+import com.jason.tank.abstractfactory.BaseExplode;
+import com.jason.tank.abstractfactory.BaseTank;
+import com.jason.tank.abstractfactory.GameFactory;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -7,15 +12,23 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import static com.jason.tank.ReflectUtil.getSingleInstance;
 
 public class TankFrame extends Frame {
+    public static final String GAME_FACTORY = "GameFactory";
+    //GameFactory gf = RectFactory.getInstance();
+    public GameFactory gf = getSingleInstance(GAME_FACTORY, GameFactory.class);
 
-    Tank myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD, this);
-    List<Bullet> bullets = new ArrayList<>();
-    List<Tank> tanks = new ArrayList<>();
-    List<Explode> explodes = new ArrayList<>();
+    //Tank myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD, this);
+    BaseTank myTank = gf.createTank(200, 400, Dir.DOWN, Group.GOOD, this);
 
-    static final int GAME_WIDTH = PropertyMgr.getInt("gameWidth"), GAME_HEIGHT = PropertyMgr.getInt("gameHeight");
+    public List<BaseBullet> bullets = new ArrayList<>();
+    public List<BaseTank> tanks = new CopyOnWriteArrayList<>();
+    public List<BaseExplode> explodes = new ArrayList<>();
+
+    public static final int GAME_WIDTH = PropertyMgr.getInt("gameWidth"), GAME_HEIGHT = PropertyMgr.getInt("gameHeight");
 
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
@@ -139,14 +152,14 @@ public class TankFrame extends Frame {
         }
 
         private void setMainTankDir() {
-            if (!bL && !bU && !bR && !bD) myTank.setMoving(false);
+            if (!bL && !bU && !bR && !bD) myTank.moving = false;
             else {
-                myTank.setMoving(true);
+                myTank.moving = true;
 
-                if (bL) myTank.setDir(Dir.LEFT);
-                if (bU) myTank.setDir(Dir.UP);
-                if (bR) myTank.setDir(Dir.RIGHT);
-                if (bD) myTank.setDir(Dir.DOWN);
+                if (bL) myTank.dir = Dir.LEFT;
+                if (bU) myTank.dir = Dir.UP;
+                if (bR) myTank.dir = Dir.RIGHT;
+                if (bD) myTank.dir = Dir.DOWN;
             }
 
         }
