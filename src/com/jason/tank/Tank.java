@@ -27,19 +27,19 @@ public class Tank {
 
     private Random random = new Random();
 
-    private TankFrame tf;
+    GameModel gm;
 
     private Group group = Group.BAD;
 
     private FireStrategy fs;
 
-    public Tank(int x, int y, Dir dir, Group group, TankFrame tf)  {
+    public Tank(int x, int y, Dir dir, Group group, GameModel gm)  {
         this.x = x;
         this.y = y;
+        this.gm = gm;
         this.dir = dir;
         this.group = group;
         if (group.equals(Group.GOOD)) speed = PropertyMgr.getInt(HIGH_SPEED);
-        this.tf = tf;
 
         rect.x = this.x;
         rect.y = this.y;
@@ -63,7 +63,7 @@ public class Tank {
 
     public void paint(Graphics g) {
 
-        if (!living) tf.tanks.remove(this);
+        if (!living) gm.tanks.remove(this);
 
         switch (dir) {
             case LEFT:
@@ -186,13 +186,6 @@ public class Tank {
         this.living = living;
     }
 
-    public TankFrame getTf() {
-        return tf;
-    }
-
-    public void setTf(TankFrame tf) {
-        this.tf = tf;
-    }
 //getter setter
 
 }

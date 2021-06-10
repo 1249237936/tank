@@ -22,7 +22,7 @@ public class FourFireStrategy implements FireStrategy {
 
         Dir[] dirs = Dir.getFourDir();
         for (Dir dir : dirs) {
-            new Bullet(bX, bY, dir, t.getGroup(), t.getTf());
+            new Bullet(bX, bY, dir, t.getGroup(), t.gm);
         }
 
 

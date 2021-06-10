@@ -22,7 +22,7 @@ public class EightFireStrategy implements FireStrategy {
 
         Dir[] dirs = Dir.values();
         for (Dir dir : dirs) {
-            new Bullet(bX, bY, dir, t.getGroup(), t.getTf());
+            new Bullet(bX, bY, dir, t.getGroup(), t.gm);
         }
 
 
