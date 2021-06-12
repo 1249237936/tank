@@ -1,4 +1,6 @@
-package com.jason.tank;
+package com.jason.tank.strategy;
+
+import com.jason.tank.*;
 
 public class DefaultFireStrategy implements FireStrategy {
     private DefaultFireStrategy() {}

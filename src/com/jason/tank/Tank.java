@@ -1,10 +1,12 @@
 package com.jason.tank;
 
+import com.jason.tank.strategy.DefaultFireStrategy;
+
 import java.awt.*;
 import java.lang.reflect.Method;
 import java.util.Random;
 
-public class Tank {
+public class Tank extends GameObject{
     private static final String GOOD_FS= "goodFS";
     private static final String BAD_FS= "badFS";
     private static final String GET_INSTANCE = "getInstance";
@@ -15,7 +17,6 @@ public class Tank {
     public static final int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static final int HEIGHT = ResourceMgr.goodTankU.getHeight();
 
-    private int x, y;
     private Dir dir = Dir.DOWN;
     private int speed = PropertyMgr.getInt(TANK_SPEED);
 
@@ -27,11 +28,13 @@ public class Tank {
 
     private Random random = new Random();
 
-    GameModel gm;
+    public GameModel gm;
 
     private Group group = Group.BAD;
 
     private FireStrategy fs;
+
+    public int ox, oy;
 
     public Tank(int x, int y, Dir dir, Group group, GameModel gm)  {
         this.x = x;
@@ -63,7 +66,7 @@ public class Tank {
 
     public void paint(Graphics g) {
 
-        if (!living) gm.tanks.remove(this);
+        if (!living) gm.remove(this);
 
         switch (dir) {
             case LEFT:
@@ -88,6 +91,9 @@ public class Tank {
 
     private void move() {
         if (!moving) return;
+
+        ox = x;
+        oy = y;
 
         switch (dir) {
             case LEFT:
@@ -184,6 +190,10 @@ public class Tank {
 
     public void setLiving(boolean living) {
         this.living = living;
+    }
+
+    public Rectangle getRect() {
+        return rect;
     }
 
 //getter setter
