@@ -23,7 +23,6 @@ public class TankTankCollider implements Collider{
                 t1.y = t1.oy;
                 t2.x = t2.ox;
                 t2.y = t2.oy;
-                return false;
             }
         }
         return true;
