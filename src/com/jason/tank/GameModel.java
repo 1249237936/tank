@@ -1,33 +1,41 @@
 package com.jason.tank;
 
-import com.jason.tank.cor.BulletTankCollider;
-import com.jason.tank.cor.Collider;
 import com.jason.tank.cor.ColliderChain;
-import com.jason.tank.cor.TankTankCollider;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameModel {
-    private static class GameModelHolder{
-        private static final GameModel INSTANCE = new GameModel();
-    }
+    private static volatile GameModel INSTANCE = new GameModel();
     public static GameModel getInstance() {
-        return GameModelHolder.INSTANCE;
+        return INSTANCE;
     }
 
-    private GameModel() {
+    static {
+        INSTANCE.init();
+    }
 
+    private GameModel() {}
+
+    private void init() {
         int initTankCount = PropertyMgr.getInt("initTankCount");
 
+        //敌方坦克
         for (int i = 0; i < initTankCount; i++) {
-            add(new Tank(50 + i * 80, 200, Dir.DOWN, Group.BAD, this));
+            add(new Tank(50 + i * 80, 200, Dir.DOWN, Group.BAD));
         }
 
+        //初始化墙
+        new Wall(150, 150, 200, 50);
+        new Wall(550, 150, 200, 50);
+        new Wall(300, 300,  50, 200);
+        new Wall(550, 300,  50, 200);
+
+        myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD);
     }
 
-    Tank myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD, this);
+    Tank myTank;
     //java.util.List<Bullet> bullets = new ArrayList<>();
     //java.util.List<Tank> tanks = new ArrayList<>();
     //List<Explode> explodes = new ArrayList<>();

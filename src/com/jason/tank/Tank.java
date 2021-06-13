@@ -20,7 +20,7 @@ public class Tank extends GameObject{
     private Dir dir = Dir.DOWN;
     private int speed = PropertyMgr.getInt(TANK_SPEED);
 
-    Rectangle rect = new Rectangle();
+    public Rectangle rect = new Rectangle();
 
     private boolean moving = true;
 
@@ -28,7 +28,6 @@ public class Tank extends GameObject{
 
     private Random random = new Random();
 
-    public GameModel gm;
 
     private Group group = Group.BAD;
 
@@ -36,10 +35,9 @@ public class Tank extends GameObject{
 
     public int ox, oy;
 
-    public Tank(int x, int y, Dir dir, Group group, GameModel gm)  {
+    public Tank(int x, int y, Dir dir, Group group)  {
         this.x = x;
         this.y = y;
-        this.gm = gm;
         this.dir = dir;
         this.group = group;
         if (group.equals(Group.GOOD)) speed = PropertyMgr.getInt(HIGH_SPEED);
@@ -51,6 +49,7 @@ public class Tank extends GameObject{
 
         if (this.group == Group.GOOD) fs = getFireStrategyByName(GOOD_FS);
         else fs = getFireStrategyByName(BAD_FS);
+        //GameModel.getInstance().add(this);
     }
 
     private FireStrategy getFireStrategyByName(String name) {
@@ -66,7 +65,7 @@ public class Tank extends GameObject{
 
     public void paint(Graphics g) {
 
-        if (!living) gm.remove(this);
+        if (!living) GameModel.getInstance().remove(this);
 
         switch (dir) {
             case LEFT:
@@ -89,11 +88,17 @@ public class Tank extends GameObject{
 
     }
 
-    private void move() {
-        if (!moving) return;
+    public void back() {
+        x = ox;
+        y = oy;
+    }
 
+    private void move() {
+        //记录移动之前的位置
         ox = x;
         oy = y;
+
+        if (!moving) return;
 
         switch (dir) {
             case LEFT:
