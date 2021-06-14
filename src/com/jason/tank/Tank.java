@@ -202,5 +202,13 @@ public class Tank extends GameObject{
     }
 
 //getter setter
+    @Override
+    public int getWidth() {
+        return WIDTH;
+    }
 
+    @Override
+    public int getHeight() {
+        return HEIGHT;
+    }
 }
