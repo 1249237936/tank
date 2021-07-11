@@ -3,11 +3,13 @@ package com.jason.tank;
 import com.jason.tank.cor.ColliderChain;
 
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameModel {
     private static volatile GameModel INSTANCE = new GameModel();
+
     public static GameModel getInstance() {
         return INSTANCE;
     }
@@ -16,7 +18,8 @@ public class GameModel {
         INSTANCE.init();
     }
 
-    private GameModel() {}
+    private GameModel() {
+    }
 
     private void init() {
         int initTankCount = PropertyMgr.getInt("initTankCount");
@@ -29,8 +32,8 @@ public class GameModel {
         //初始化墙
         new Wall(150, 150, 200, 50);
         new Wall(550, 150, 200, 50);
-        new Wall(300, 300,  50, 200);
-        new Wall(550, 300,  50, 200);
+        new Wall(300, 300, 50, 200);
+        new Wall(550, 300, 50, 200);
 
         myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD);
     }
@@ -48,6 +51,7 @@ public class GameModel {
     public void add(GameObject go) {
         this.objects.add(go);
     }
+
     public void remove(GameObject go) {
         this.objects.remove(go);
     }
@@ -79,5 +83,25 @@ public class GameModel {
 
     public Tank getMainTank() {
         return myTank;
+    }
+
+    public void save() {
+        File f = new File("j:/tank.data");
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f))) {
+            oos.writeObject(myTank);
+            oos.writeObject(objects);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void load() {
+        File f = new File("j:/tank.data");
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f))) {
+            myTank = (Tank) ois.readObject();
+            objects = (List<GameObject>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
