@@ -15,6 +15,7 @@ public class Main {
         while (true) {
             Thread.sleep(25);
             tf.repaint();
+
         }
     }
 }
