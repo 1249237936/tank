@@ -2,6 +2,7 @@ package com.jason.tank.net;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -13,7 +14,7 @@ public class Client {
     private Channel channel = null;
 
     public void connect() {
-        EventLoopGroup group = new NioEventLoopGroup();
+        EventLoopGroup group = new NioEventLoopGroup(1);
 
         Bootstrap b = new Bootstrap();
 
@@ -43,8 +44,8 @@ public class Client {
     }
 
     public void send(String msg) {
-        System.out.println("SEND: " + msg);
-        channel.writeAndFlush(msg);
+        ByteBuf buf = Unpooled.copiedBuffer(msg.getBytes());
+        channel.writeAndFlush(buf);
     }
 
     public void closeConnect() {
@@ -57,7 +58,7 @@ class ClientChannelInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         ch.pipeline()
-                .addLast(new TankMsgEncoder())
+                .addLast(new TankJoinMsgEncoder())
                 .addLast(new ClientHandler());
     }
 }
@@ -85,6 +86,6 @@ class ClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        ctx.writeAndFlush(new TankMsg(5, 8));
+		//ctx.writeAndFlush(new TankJoinMsg(5, 8));
     }
 }

@@ -10,7 +10,7 @@ public class ServerFrame extends Frame {
     Button btnStart = new Button("start");
     TextArea taLeft = new TextArea();
     TextArea taRight = new TextArea();
-    Server Server = new Server();
+    Server server = new Server();
 
     private ServerFrame () {
         setSize(1600, 600);
@@ -32,7 +32,7 @@ public class ServerFrame extends Frame {
 
     public static void main(String[] args) {
         ServerFrame.INSTANCE.setVisible(true);
-        ServerFrame.INSTANCE.Server.serverStart();
+        ServerFrame.INSTANCE.server.serverStart();
     }
 
     public void updateServerMsg(String string) {
