@@ -1,10 +1,12 @@
 package com.jason.tank.net;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.ReferenceCountUtil;
 
 public class Client {
 
@@ -62,6 +64,24 @@ class ClientChannelInitializer extends ChannelInitializer<SocketChannel> {
 
 class ClientHandler extends ChannelInboundHandlerAdapter {
 
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        ByteBuf buf = null;
+        try {
+            buf = (ByteBuf) msg;
+            byte[] bytes = new byte[buf.readableBytes()];
+            buf.getBytes(buf.readerIndex(), bytes);
+            String msgAccepted = new String(bytes);
+            //ClientFrame.INSTANCE.updateText(msgAccepted);
+            // System.out.println(buf);
+            // System.out.println(buf.refCnt());
+        } finally {
+            if (buf != null) {
+                ReferenceCountUtil.release(buf);
+                //System.out.println(buf.refCnt());
+            }
+        }
+    }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
