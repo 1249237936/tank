@@ -4,7 +4,8 @@ import com.jason.tank.net.Client;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        TankFrame tf = new TankFrame();
+        TankFrame tf = TankFrame.INSTANCE;
+        tf.setVisible(true);
 
         /*int initTankCount = PropertyMgr.getInt("initTankCount");
 
