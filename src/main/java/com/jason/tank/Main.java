@@ -1,5 +1,7 @@
 package com.jason.tank;
 
+import com.jason.tank.net.Client;
+
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         TankFrame tf = new TankFrame();
@@ -12,10 +14,18 @@ public class Main {
 
         new Thread(() -> new Audio("audio/war1.wav").loop()).start();
 
-        while (true) {
-            Thread.sleep(25);
-            tf.repaint();
+        new Thread(()->{
+            while (true) {
+                try {
+                    Thread.sleep(25);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                tf.repaint();
+            }
+        }).start();
 
-        }
+        Client c = new Client();
+        c.connect();
     }
 }
