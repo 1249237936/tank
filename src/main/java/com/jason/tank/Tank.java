@@ -1,6 +1,8 @@
 package com.jason.tank;
 
 import com.jason.tank.net.TankJoinMsg;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.awt.*;
 import java.lang.reflect.Method;
@@ -17,7 +19,8 @@ public class Tank {
 
     public static final int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static final int HEIGHT = ResourceMgr.goodTankU.getHeight();
-
+    @Getter
+    @Setter
     private UUID id = UUID.randomUUID();
 
     private int x, y;
@@ -78,6 +81,11 @@ public class Tank {
     public void paint(Graphics g) {
 
         if (!living) tf.tanks.remove(this);
+        //uuid on head
+        Color c = g.getColor();
+        g.setColor(Color.YELLOW);
+        g.drawString(id.toString(), this.x, this.y - 10);
+        g.setColor(c);
 
         switch (dir) {
             case LEFT:

@@ -2,6 +2,7 @@ package com.jason.tank.net;
 
 import com.jason.tank.Dir;
 import com.jason.tank.Group;
+import com.jason.tank.Tank;
 
 import java.io.*;
 import java.util.UUID;
@@ -12,6 +13,15 @@ public class TankJoinMsg {
     public boolean moving;
     public Group group;
     public UUID id;
+
+    public TankJoinMsg(Tank t) {
+        this.x = t.getX();
+        this.y = t.getY();
+        this.dir = t.getDir();
+        this.group = t.getGroup();
+        this.id = t.getId();
+        this.moving = t.isMoving();
+    }
 
     public TankJoinMsg(int x, int y, Dir dir, boolean moving, Group group, UUID id) {
         this.x = x;
