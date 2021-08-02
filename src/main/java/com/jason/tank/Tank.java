@@ -29,7 +29,7 @@ public class Tank {
 
     Rectangle rect = new Rectangle();
 
-    private boolean moving = true;
+    private boolean moving = false;
 
     private boolean living = true;
 
