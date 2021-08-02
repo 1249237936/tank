@@ -1,5 +1,6 @@
 import com.jason.tank.Dir;
 import com.jason.tank.Group;
+import com.jason.tank.net.MsgType;
 import com.jason.tank.net.TankJoinMsg;
 import com.jason.tank.net.TankJoinMsgDecoder;
 import com.jason.tank.net.TankJoinMsgEncoder;
@@ -27,6 +28,11 @@ public class TankJoinCodecTest {
         ch.writeOutbound(msg);
 
         ByteBuf buf = ch.readOutbound();
+        MsgType msgType = MsgType.values()[buf.readInt()];
+        assertEquals(MsgType.TankJoin, msgType);
+
+        int length = buf.readInt();
+        assertEquals(33, length);
 
         int x = buf.readInt();
         int y = buf.readInt();
