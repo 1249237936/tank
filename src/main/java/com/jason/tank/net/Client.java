@@ -1,23 +1,18 @@
 package com.jason.tank.net;
 
-import com.jason.tank.Dir;
-import com.jason.tank.Group;
-import com.jason.tank.Tank;
 import com.jason.tank.TankFrame;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-import java.util.UUID;
-
 public class Client {
+    public static final Client INSTANCE = new Client();
 
     private Channel channel = null;
 
+    private Client() {}
     public void connect() {
         EventLoopGroup group = new NioEventLoopGroup(1);
 
@@ -48,13 +43,12 @@ public class Client {
         }
     }
 
-    public void send(String msg) {
-        ByteBuf buf = Unpooled.copiedBuffer(msg.getBytes());
-        channel.writeAndFlush(buf);
+    public void send(TankJoinMsg msg) {
+        channel.writeAndFlush(msg);
     }
 
     public void closeConnect() {
-        this.send("_bye_");
+        //this.send("_bye_");
         //channel.close();
     }
 }
@@ -73,13 +67,7 @@ class ClientHandler extends SimpleChannelInboundHandler<TankJoinMsg> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TankJoinMsg msg) throws Exception {
-
-        if (msg.id.equals(TankFrame.INSTANCE.getMainTank().getId()) ||
-                TankFrame.INSTANCE.findByUUID(msg.id) != null) return;
-        System.out.println(msg);
-        Tank t = new Tank(msg);
-        TankFrame.INSTANCE.addTank(t);
-        ctx.writeAndFlush(new TankJoinMsg(TankFrame.INSTANCE.getMainTank()));
+        msg.handle();
     }
 
     @Override

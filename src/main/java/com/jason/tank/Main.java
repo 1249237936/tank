@@ -26,7 +26,7 @@ public class Main {
             }
         }).start();
 
-        Client c = new Client();
+        Client c = Client.INSTANCE;
         c.connect();
     }
 }

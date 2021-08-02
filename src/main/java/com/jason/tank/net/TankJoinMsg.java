@@ -3,11 +3,12 @@ package com.jason.tank.net;
 import com.jason.tank.Dir;
 import com.jason.tank.Group;
 import com.jason.tank.Tank;
+import com.jason.tank.TankFrame;
 
 import java.io.*;
 import java.util.UUID;
 
-public class TankJoinMsg {
+public class TankJoinMsg extends Msg{
     public int x, y;
     public Dir dir;
     public boolean moving;
@@ -58,6 +59,7 @@ public class TankJoinMsg {
         }
     }
 
+    @Override
     public byte[] toBytes() {
         ByteArrayOutputStream baos = null;
         DataOutputStream dos = null;
@@ -110,5 +112,17 @@ public class TankJoinMsg {
                 .append("group=" + group + " | ")
                 .append("]");
         return builder.toString();
+    }
+
+    @Override
+    public void handle() {
+        if (this.id.equals(TankFrame.INSTANCE.getMainTank().getId()) ||
+                TankFrame.INSTANCE.findByUUID(this.id) != null) return;
+        System.out.println(this);
+        Tank t = new Tank(this);
+        TankFrame.INSTANCE.addTank(t);
+
+        //send a new TankJoinMsg to the new joined tank
+        Client.INSTANCE.send(new TankJoinMsg(TankFrame.INSTANCE.getMainTank()));
     }
 }
