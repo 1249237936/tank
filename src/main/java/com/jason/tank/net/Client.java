@@ -2,6 +2,8 @@ package com.jason.tank.net;
 
 import com.jason.tank.Dir;
 import com.jason.tank.Group;
+import com.jason.tank.Tank;
+import com.jason.tank.TankFrame;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -9,7 +11,6 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.ReferenceCountUtil;
 
 import java.util.UUID;
 
@@ -72,7 +73,8 @@ class ClientHandler extends SimpleChannelInboundHandler<TankJoinMsg> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TankJoinMsg msg) throws Exception {
-        System.out.println(msg);
+        Tank t = new Tank(msg);
+        TankFrame.INSTANCE.addTank(t);
     }
 
     @Override

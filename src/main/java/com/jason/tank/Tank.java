@@ -1,8 +1,11 @@
 package com.jason.tank;
 
+import com.jason.tank.net.TankJoinMsg;
+
 import java.awt.*;
 import java.lang.reflect.Method;
 import java.util.Random;
+import java.util.UUID;
 
 public class Tank {
     private static final String GOOD_FS= "goodFS";
@@ -14,6 +17,8 @@ public class Tank {
 
     public static final int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static final int HEIGHT = ResourceMgr.goodTankU.getHeight();
+
+    private UUID id = UUID.randomUUID();
 
     private int x, y;
     private Dir dir = Dir.DOWN;
@@ -32,6 +37,15 @@ public class Tank {
     private Group group = Group.BAD;
 
     private FireStrategy fs;
+
+    public Tank(TankJoinMsg msg) {
+        this.x = msg.x;
+        this.y = msg.y;
+        this.dir = msg.dir;
+        this.moving = msg.moving;
+        this.group = msg.group;
+        this.id = msg.id;
+    }
 
     public Tank(int x, int y, Dir dir, Group group, TankFrame tf)  {
         this.x = x;

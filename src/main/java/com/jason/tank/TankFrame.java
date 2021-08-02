@@ -21,6 +21,10 @@ public class TankFrame extends Frame {
 
     static final int GAME_WIDTH = PropertyMgr.getInt("gameWidth"), GAME_HEIGHT = PropertyMgr.getInt("gameHeight");
 
+    public void addTank(Tank t) {
+        tanks.add(t);
+    }
+
     private TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setResizable(false);
