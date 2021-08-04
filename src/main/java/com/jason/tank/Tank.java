@@ -25,7 +25,7 @@ public class Tank {
 
     private int x, y;
     private Dir dir = Dir.DOWN;
-    private int speed = PropertyMgr.getInt(TANK_SPEED);
+    private int speed = PropertyMgr.getInt(HIGH_SPEED);
 
     Rectangle rect = new Rectangle();
 
@@ -55,7 +55,7 @@ public class Tank {
         this.y = y;
         this.dir = dir;
         this.group = group;
-        if (group.equals(Group.GOOD)) speed = PropertyMgr.getInt(HIGH_SPEED);
+//        if (group.equals(Group.GOOD)) speed = PropertyMgr.getInt(HIGH_SPEED);
         this.tf = tf;
 
         rect.x = this.x;

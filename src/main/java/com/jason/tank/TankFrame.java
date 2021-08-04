@@ -2,6 +2,7 @@ package com.jason.tank;
 
 import com.jason.tank.net.Client;
 import com.jason.tank.net.TankStartMovingMsg;
+import com.jason.tank.net.TankStopMsg;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -154,16 +155,20 @@ public class TankFrame extends Frame {
         }
 
         private void setMainTankDir() {
-            if (!bL && !bU && !bR && !bD) myTank.setMoving(false);
-            else {
-                myTank.setMoving(true);
+            if (!bL && !bU && !bR && !bD) {
+                myTank.setMoving(false);
+                Client.INSTANCE.send(new TankStopMsg(getMainTank()));
+            } else {
 
                 if (bL) myTank.setDir(Dir.LEFT);
                 if (bU) myTank.setDir(Dir.UP);
                 if (bR) myTank.setDir(Dir.RIGHT);
                 if (bD) myTank.setDir(Dir.DOWN);
                 //发出坦克移动的消息
-                Client.INSTANCE.send(new TankStartMovingMsg(getMainTank()));
+                if (!myTank.isMoving())
+                    Client.INSTANCE.send(new TankStartMovingMsg(getMainTank()));
+
+                myTank.setMoving(true);
             }
 
         }
