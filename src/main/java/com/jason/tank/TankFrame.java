@@ -1,5 +1,8 @@
 package com.jason.tank;
 
+import com.jason.tank.net.Client;
+import com.jason.tank.net.TankStartMovingMsg;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -13,12 +16,13 @@ public class TankFrame extends Frame {
 
     Random r = new Random();
 
-    Tank myTank = new Tank(r.nextInt(GAME_HEIGHT), r.nextInt(GAME_HEIGHT), Dir.DOWN, Group.GOOD, this);
+//    public static final int GAME_WIDTH = PropertyMgr.getInt("gameWidth"), GAME_HEIGHT = PropertyMgr.getInt("gameHeight");
+    Tank myTank = new Tank(r.nextInt(GAME_WIDTH), r.nextInt(GAME_HEIGHT), Dir.DOWN, Group.GOOD, this);
     List<Bullet> bullets = new ArrayList<>();
     Map<UUID, Tank> tanks = new HashMap<>();
     List<Explode> explodes = new ArrayList<>();
 
-    static final int GAME_WIDTH = PropertyMgr.getInt("gameWidth"), GAME_HEIGHT = PropertyMgr.getInt("gameHeight");
+    static final int GAME_WIDTH = 1080, GAME_HEIGHT = 960;
 
     public void addTank(Tank t) {
         tanks.put(t.getId(), t);
@@ -75,7 +79,8 @@ public class TankFrame extends Frame {
             bullets.get(i).paint(g);
         }
 
-        tanks.values().forEach(e -> e.paint(g));
+		//java8 stream api
+		tanks.values().stream().forEach((e)->e.paint(g));
 
         for (int i = 0; i < explodes.size(); i++) {
             explodes.get(i).paint(g);
@@ -118,6 +123,7 @@ public class TankFrame extends Frame {
             }
 
             setMainTankDir();
+			new Thread(()->new Audio("audio/tank_move.wav").play()).start();
         }
 
         @Override
@@ -156,6 +162,8 @@ public class TankFrame extends Frame {
                 if (bU) myTank.setDir(Dir.UP);
                 if (bR) myTank.setDir(Dir.RIGHT);
                 if (bD) myTank.setDir(Dir.DOWN);
+                //发出坦克移动的消息
+                Client.INSTANCE.send(new TankStartMovingMsg(getMainTank()));
             }
 
         }

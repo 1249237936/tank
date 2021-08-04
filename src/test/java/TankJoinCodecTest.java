@@ -2,8 +2,8 @@ import com.jason.tank.Dir;
 import com.jason.tank.Group;
 import com.jason.tank.net.MsgType;
 import com.jason.tank.net.TankJoinMsg;
-import com.jason.tank.net.TankJoinMsgDecoder;
-import com.jason.tank.net.TankJoinMsgEncoder;
+import com.jason.tank.net.MsgDecoder;
+import com.jason.tank.net.MsgEncoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.embedded.EmbeddedChannel;
@@ -23,7 +23,7 @@ public class TankJoinCodecTest {
         TankJoinMsg msg = new TankJoinMsg(5, 10, Dir.DOWN, true, Group.BAD, id);
 
         ch.pipeline()
-                .addLast(new TankJoinMsgEncoder());
+                .addLast(new MsgEncoder());
 
         ch.writeOutbound(msg);
 
@@ -60,10 +60,13 @@ public class TankJoinCodecTest {
         TankJoinMsg msg = new TankJoinMsg(5, 10, Dir.DOWN, true, Group.BAD, id);
 
         ch.pipeline()
-                .addLast(new TankJoinMsgDecoder());
+                .addLast(new MsgDecoder());
 
         ByteBuf buf = Unpooled.buffer();
-        buf.writeBytes(msg.toBytes());
+        buf.writeInt(MsgType.TankJoin.ordinal());
+        byte[] bytes = msg.toBytes();
+        buf.writeInt(bytes.length);
+        buf.writeBytes(bytes);
 
         ch.writeInbound(buf.duplicate());
 
