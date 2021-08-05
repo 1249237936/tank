@@ -1,5 +1,7 @@
 package com.jason.tank;
 
+import com.jason.tank.net.BulletNewMsg;
+import com.jason.tank.net.Client;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,6 +39,7 @@ public class Bullet {
         rect.height = HEIGHT;
 
         tf.bullets.add(this);
+        Client.INSTANCE.send(new BulletNewMsg(this));
     }
 
     public void collideWith(Tank tank) {

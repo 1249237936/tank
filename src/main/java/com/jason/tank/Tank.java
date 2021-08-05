@@ -1,5 +1,6 @@
 package com.jason.tank;
 
+import com.jason.tank.net.Client;
 import com.jason.tank.net.TankJoinMsg;
 import lombok.Getter;
 import lombok.Setter;
