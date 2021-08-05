@@ -1,6 +1,5 @@
 package com.jason.tank;
 
-import com.jason.tank.net.Client;
 import com.jason.tank.net.TankJoinMsg;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +8,8 @@ import java.awt.*;
 import java.lang.reflect.Method;
 import java.util.Random;
 import java.util.UUID;
-
+@Getter
+@Setter
 public class Tank {
     private static final String GOOD_FS= "goodFS";
     private static final String BAD_FS= "badFS";
@@ -20,8 +20,7 @@ public class Tank {
 
     public static final int WIDTH = ResourceMgr.goodTankU.getWidth();
     public static final int HEIGHT = ResourceMgr.goodTankU.getHeight();
-    @Getter
-    @Setter
+
     private UUID id = UUID.randomUUID();
 
     private int x, y;
@@ -49,6 +48,11 @@ public class Tank {
         this.moving = msg.moving;
         this.group = msg.group;
         this.id = msg.id;
+
+        rect.x = this.x;
+        rect.y = this.y;
+        rect.width = WIDTH;
+        rect.height = HEIGHT;
     }
 
     public Tank(int x, int y, Dir dir, Group group, TankFrame tf)  {
@@ -80,13 +84,21 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
-
-        if (!living) tf.tanks.remove(this);
         //uuid on head
         Color c = g.getColor();
         g.setColor(Color.YELLOW);
-        g.drawString(id.toString(), this.x, this.y - 10);
+        g.drawString(id.toString(), this.x, this.y - 20);
+        g.drawString("live=" + living, x, y - 10);
         g.setColor(c);
+
+        //draw a rect if dead!
+        if (!living) {
+            moving = false;
+            Color cc = g.getColor();
+            g.drawRect(x, y, WIDTH, HEIGHT);
+            g.setColor(cc);
+            return;
+        }
 
         switch (dir) {
             case LEFT:
@@ -110,6 +122,8 @@ public class Tank {
     }
 
     private void move() {
+        if (!living) return;
+
         if (!moving) return;
 
         switch (dir) {
@@ -158,64 +172,27 @@ public class Tank {
 
     public void die() {
         living = false;
+        int eX = this.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
+        int eY = this.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
+        //TankFrame.INSTANCE.explodes.add(new Explode(eX, eY, tf));
     }
 
-    //getter setter
-    public Dir getDir() {
-        return dir;
-    }
 
-    public void setDir(Dir dir) {
-        this.dir = dir;
+    @Override
+    public String toString() {
+        return "Tank{" +
+                "id=" + id +
+                ", x=" + x +
+                ", y=" + y +
+                ", dir=" + dir +
+                ", speed=" + speed +
+                ", rect=" + rect +
+                ", moving=" + moving +
+                ", living=" + living +
+                ", random=" + random +
+                ", tf=" + tf +
+                ", group=" + group +
+                ", fs=" + fs +
+                '}';
     }
-
-    public boolean isMoving() {
-        return moving;
-    }
-
-    public void setMoving(boolean moving) {
-        this.moving = moving;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
-    public boolean isLiving() {
-        return living;
-    }
-
-    public void setLiving(boolean living) {
-        this.living = living;
-    }
-
-    public TankFrame getTf() {
-        return tf;
-    }
-
-    public void setTf(TankFrame tf) {
-        this.tf = tf;
-    }
-//getter setter
-
 }

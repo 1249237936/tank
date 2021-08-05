@@ -2,6 +2,7 @@ package com.jason.tank;
 
 import com.jason.tank.net.BulletNewMsg;
 import com.jason.tank.net.Client;
+import com.jason.tank.net.TankDieMsg;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,7 @@ public class Bullet {
     private Dir dir;
 
     private UUID id = UUID.randomUUID();
+    private UUID playerId;
 
     Rectangle rect = new Rectangle();
 
@@ -26,7 +28,8 @@ public class Bullet {
 
     private Group group = Group.BAD;
 
-    public Bullet(int x, int y, Dir dir, Group group, TankFrame tf) {
+    public Bullet(UUID playerId,int x, int y, Dir dir, Group group, TankFrame tf) {
+        this.playerId = playerId;
         this.x = x;
         this.y = y;
         this.dir = dir;
@@ -43,16 +46,13 @@ public class Bullet {
     }
 
     public void collideWith(Tank tank) {
-        if (this.group == tank.getGroup()) return;
-
+        if (this.playerId.equals(tank.getId())) return;
 //        Rectangle rect1 = new Rectangle(x, y, WIDTH, HEIGHT);
 //        Rectangle rect2 = new Rectangle(tank.getX(), tank.getY(), Tank.WIDTH, Tank.HEIGHT);
-        if (rect.intersects(tank.rect)) {
+        if (this.living && tank.isLiving() && rect.intersects(tank.rect)) {
             tank.die();
             this.die();
-            int eX = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
-            int eY = tank.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
-            tf.explodes.add(new Explode(eX, eY, tf));
+            Client.INSTANCE.send(new TankDieMsg(this.playerId, tank.getId()));
         }
     }
 
