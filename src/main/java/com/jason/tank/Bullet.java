@@ -1,13 +1,20 @@
 package com.jason.tank;
 
-import java.awt.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.awt.*;
+import java.util.UUID;
+
+@Getter @Setter
 public class Bullet {
     private static final int SPEED = PropertyMgr.getInt("bulletSpeed");
     public static final int WIDTH = ResourceMgr.bulletD.getWidth();
     public static final int HEIGHT = ResourceMgr.bulletD.getHeight();
     private int x, y;
     private Dir dir;
+
+    private UUID id = UUID.randomUUID();
 
     Rectangle rect = new Rectangle();
 
@@ -30,6 +37,20 @@ public class Bullet {
         rect.height = HEIGHT;
 
         tf.bullets.add(this);
+    }
+
+    public void collideWith(Tank tank) {
+        if (this.group == tank.getGroup()) return;
+
+//        Rectangle rect1 = new Rectangle(x, y, WIDTH, HEIGHT);
+//        Rectangle rect2 = new Rectangle(tank.getX(), tank.getY(), Tank.WIDTH, Tank.HEIGHT);
+        if (rect.intersects(tank.rect)) {
+            tank.die();
+            this.die();
+            int eX = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
+            int eY = tank.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
+            tf.explodes.add(new Explode(eX, eY, tf));
+        }
     }
 
     public void paint(Graphics g) {
@@ -118,30 +139,11 @@ public class Bullet {
         if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) living = false;
     }
 
-    public void collideWith(Tank tank) {
-        if (this.group == tank.getGroup()) return;
 
-//        Rectangle rect1 = new Rectangle(x, y, WIDTH, HEIGHT);
-//        Rectangle rect2 = new Rectangle(tank.getX(), tank.getY(), Tank.WIDTH, Tank.HEIGHT);
-        if (rect.intersects(tank.rect)) {
-            tank.die();
-            this.die();
-            int eX = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
-            int eY = tank.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
-            tf.explodes.add(new Explode(eX, eY, tf));
-        }
-    }
 
     private void die() {
         living = false;
     }
 
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
 
 }

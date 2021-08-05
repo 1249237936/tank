@@ -1,6 +1,7 @@
 package com.jason.tank;
 
 import com.jason.tank.net.Client;
+import com.jason.tank.net.TankDirChangedMsg;
 import com.jason.tank.net.TankStartMovingMsg;
 import com.jason.tank.net.TankStopMsg;
 
@@ -87,10 +88,11 @@ public class TankFrame extends Frame {
             explodes.get(i).paint(g);
         }
         /*collision detect*/
+        Collection<Tank> values = tanks.values();
         for (int i = 0; i < bullets.size(); i++) {
-            for (int j = 0; j < tanks.size(); j++) {
-                bullets.get(i).collideWith(tanks.get(j));
-            }
+            for (Tank t : values)
+                bullets.get(i).collideWith(t);
+
         }
 
     }
@@ -155,6 +157,9 @@ public class TankFrame extends Frame {
         }
 
         private void setMainTankDir() {
+            //save the old dir
+            Dir dir = myTank.getDir();
+
             if (!bL && !bU && !bR && !bD) {
                 myTank.setMoving(false);
                 Client.INSTANCE.send(new TankStopMsg(getMainTank()));
@@ -169,6 +174,10 @@ public class TankFrame extends Frame {
                     Client.INSTANCE.send(new TankStartMovingMsg(getMainTank()));
 
                 myTank.setMoving(true);
+
+                if (dir != myTank.getDir()) {
+                    Client.INSTANCE.send(new TankDirChangedMsg(myTank));
+                }
             }
 
         }

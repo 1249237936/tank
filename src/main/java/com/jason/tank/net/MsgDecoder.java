@@ -25,7 +25,9 @@ public class MsgDecoder extends ByteToMessageDecoder {
 
         Msg msg = null;
 
-        switch (msgType) {
+        //reflection
+        msg = (Msg) Class.forName("com.jason.tank.net." + msgType.toString() + "Msg").getDeclaredConstructor().newInstance();
+        /*switch (msgType) {
             case TankJoin:
                 msg = new TankJoinMsg();
                 break;
@@ -36,7 +38,7 @@ public class MsgDecoder extends ByteToMessageDecoder {
                 msg = new TankStopMsg();
             default:
                 break;
-        }
+        }*/
 
         msg.parse(bytes);
         out.add(msg);
